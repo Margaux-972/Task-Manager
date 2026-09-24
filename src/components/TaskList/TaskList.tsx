@@ -14,8 +14,17 @@ function TaskList({
   onStatusChange,
   onUpdate,
 }: TaskListProps) {
+  if (tasks.length === 0) {
+    return (
+      <section className="task-list task-list--empty">
+        <h2>Aucune tâche</h2>
+        <p>Commence par créer ta première tâche.</p>
+      </section>
+    );
+  }
+
   return (
-    <section>
+    <section className="task-list">
       {tasks.map((task) => (
         <TaskItem
           key={task.id}

@@ -9,6 +9,7 @@ import {
   updateTask,
   updateTaskStatus,
 } from "./utils/taskUtils";
+import "./App.css";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>(getTasks);
@@ -42,10 +43,21 @@ function App() {
   };
 
   return (
-    <main>
-      <h1>Gestionnaire de tâches</h1>
+    <main className="app">
+      <header className="app__header">
+        <div>
+          <p className="app__eyebrow">Organisation personnelle</p>
+          <h1>Gestionnaire de tâches</h1>
+          <p className="app__subtitle">
+            Organise tes tâches, suis leur progression et garde une vue claire
+            sur ton travail.
+          </p>
+        </div>
+      </header>
 
-      <TaskForm onAddTask={handleAddTask} />
+      <section className="app__form">
+        <TaskForm onAddTask={handleAddTask} />
+      </section>
 
       <TaskList
         tasks={tasks}

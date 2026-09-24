@@ -47,46 +47,92 @@ function TaskItem({ task, onDelete, onStatusChange, onUpdate }: TaskItemProps) {
 
   if (isEditing) {
     return (
-      <article>
-        <input
-          type="text"
-          value={editedTitle}
-          onChange={(event) => setEditedTitle(event.target.value)}
-        />
+      <article className="task-item task-item--editing">
+        <div className="task-item__field">
+          <label htmlFor={`title-${task.id}`}>Titre</label>
 
-        <textarea
-          value={editedDescription}
-          onChange={(event) => setEditedDescription(event.target.value)}
-        />
+          <input
+            id={`title-${task.id}`}
+            type="text"
+            value={editedTitle}
+            onChange={(event) => setEditedTitle(event.target.value)}
+          />
+        </div>
 
-        <button onClick={handleSave}>Enregistrer</button>
+        <div className="task-item__field">
+          <label htmlFor={`description-${task.id}`}>Description</label>
 
-        <button onClick={handleCancel}>Annuler</button>
+          <textarea
+            id={`description-${task.id}`}
+            value={editedDescription}
+            onChange={(event) => setEditedDescription(event.target.value)}
+          />
+        </div>
+
+        <div className="task-item__actions">
+          <button className="task-item__save" onClick={handleSave}>
+            Enregistrer
+          </button>
+
+          <button className="task-item__cancel" onClick={handleCancel}>
+            Annuler
+          </button>
+        </div>
       </article>
     );
   }
 
   return (
-    <article>
-      <h2>{task.title}</h2>
+    <article className={`task-item task-item--${task.status}`}>
+      <div className="task-item__content">
+        <div className="task-item__header">
+          <h2 className="task-item__title">{task.title}</h2>
 
-      <p>{task.description}</p>
+          <span className={`task-status task-status--${task.status}`}>
+            {task.status === "todo" && "À faire"}
+            {task.status === "in-progress" && "En cours"}
+            {task.status === "done" && "Terminée"}
+          </span>
+        </div>
 
-      <label htmlFor={`status-${task.id}`}>Statut :</label>
+        {task.description && (
+          <p className="task-item__description">{task.description}</p>
+        )}
+      </div>
 
-      <select
-        id={`status-${task.id}`}
-        value={task.status}
-        onChange={handleStatusChange}
-      >
-        <option value="todo">À faire</option>
-        <option value="in-progress">En cours</option>
-        <option value="done">Terminée</option>
-      </select>
+      <div className="task-item__footer">
+        <div className="task-item__status">
+          <label htmlFor={`status-${task.id}`}>Statut</label>
 
-      <button onClick={() => setIsEditing(true)}>Modifier</button>
+          <select
+            id={`status-${task.id}`}
+            value={task.status}
+            onChange={handleStatusChange}
+          >
+            <option value="todo">À faire</option>
+            <option value="in-progress">En cours</option>
+            <option value="done">Terminée</option>
+          </select>
+        </div>
 
-      <button onClick={() => onDelete(task.id)}>Supprimer</button>
+        <div className="task-item__actions">
+          <button
+            type="button"
+            className="task-item__button task-item__button--edit"
+            onClick={() => setIsEditing(true)}
+          >
+            Modifier
+          </button>
+
+          <button
+            type="button"
+            className="task-item__button task-item__button--delete"
+            onClick={() => onDelete(task.id)}
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
     </article>
   );
 }
