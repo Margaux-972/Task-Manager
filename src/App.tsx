@@ -3,7 +3,12 @@ import type { Task, TaskStatus } from "./types/task";
 import TaskForm from "./components/TaskForm/TaskForm";
 import TaskList from "./components/TaskList/TaskList";
 import { getTasks, saveTasks } from "./services/taskStorage";
-import { deleteTask } from "./utils/taskUtils";
+import {
+  createTask,
+  deleteTask,
+  updateTask,
+  updateTaskStatus,
+} from "./utils/taskUtils";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>(getTasks);
@@ -12,14 +17,8 @@ function App() {
     saveTasks(tasks);
   }, [tasks]);
 
-  const addTask = (title: string, description: string) => {
-    const newTask: Task = {
-      id: crypto.randomUUID(),
-      title,
-      description,
-      status: "todo",
-      createdAt: new Date().toISOString(),
-    };
+  const handleAddTask = (title: string, description: string) => {
+    const newTask = createTask(title, description);
 
     setTasks((currentTasks) => [...currentTasks, newTask]);
   };
@@ -28,34 +27,17 @@ function App() {
     setTasks((currentTasks) => deleteTask(currentTasks, taskId));
   };
 
-  const updateTaskStatus = (taskId: string, status: TaskStatus) => {
-    setTasks((currentTasks) =>
-      currentTasks.map((task) => {
-        if (task.id === taskId) {
-          return {
-            ...task,
-            status,
-          };
-        }
-
-        return task;
-      }),
-    );
+  const handleStatusChange = (taskId: string, status: TaskStatus) => {
+    setTasks((currentTasks) => updateTaskStatus(currentTasks, taskId, status));
   };
 
-  const updateTask = (taskId: string, title: string, description: string) => {
+  const handleUpdateTask = (
+    taskId: string,
+    title: string,
+    description: string,
+  ) => {
     setTasks((currentTasks) =>
-      currentTasks.map((task) => {
-        if (task.id === taskId) {
-          return {
-            ...task,
-            title,
-            description,
-          };
-        }
-
-        return task;
-      }),
+      updateTask(currentTasks, taskId, title, description),
     );
   };
 
@@ -63,13 +45,13 @@ function App() {
     <main>
       <h1>Gestionnaire de tâches</h1>
 
-      <TaskForm onAddTask={addTask} />
+      <TaskForm onAddTask={handleAddTask} />
 
       <TaskList
         tasks={tasks}
         onDelete={handleDeleteTask}
-        onStatusChange={updateTaskStatus}
-        onUpdate={updateTask}
+        onStatusChange={handleStatusChange}
+        onUpdate={handleUpdateTask}
       />
     </main>
   );
