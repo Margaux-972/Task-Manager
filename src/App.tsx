@@ -1,18 +1,20 @@
+import "./App.css";
 import { useEffect, useState } from "react";
-import type { Task, TaskStatus } from "./types/task";
 import TaskForm from "./components/TaskForm/TaskForm";
 import TaskList from "./components/TaskList/TaskList";
+import TaskFilters from "./components/TaskFilter/TaskFilters";
 import { getTasks, saveTasks } from "./services/taskStorage";
+import type { Task, TaskFilter, TaskStatus } from "./types/task";
 import {
   createTask,
   deleteTask,
   updateTask,
   updateTaskStatus,
 } from "./utils/taskUtils";
-import "./App.css";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>(getTasks);
+  const [filter, setFilter] = useState<TaskFilter>("all");
 
   useEffect(() => {
     saveTasks(tasks);
@@ -42,6 +44,16 @@ function App() {
     );
   };
 
+  const taskCounts = {
+    all: tasks.length,
+    todo: tasks.filter((task) => task.status === "todo").length,
+    "in-progress": tasks.filter((task) => task.status === "in-progress").length,
+    done: tasks.filter((task) => task.status === "done").length,
+  };
+
+  const filteredTasks =
+    filter === "all" ? tasks : tasks.filter((task) => task.status === filter);
+
   return (
     <main className="app">
       <header className="app__header">
@@ -58,9 +70,14 @@ function App() {
       <section className="app__form">
         <TaskForm onAddTask={handleAddTask} />
       </section>
+      <TaskFilters
+        filter={filter}
+        counts={taskCounts}
+        onFilterChange={setFilter}
+      />
 
       <TaskList
-        tasks={tasks}
+        tasks={filteredTasks}
         onDelete={handleDeleteTask}
         onStatusChange={handleStatusChange}
         onUpdate={handleUpdateTask}

@@ -209,7 +209,6 @@ button {
    ======================== TASK ITEM =========================
    ============================================================
    ============================================================ */
-
 .task-item {
   padding: 1.5rem 0;
   background-color: transparent;
@@ -236,6 +235,36 @@ button {
 
 .task-item--done {
   border-left-color: #4d9f70;
+}
+
+.task-item__status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.task-item__status label {
+  color: #78716c;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.task-item__status select {
+  min-width: 130px;
+  padding: 0.45rem 0;
+  border: none;
+  border-bottom: 1px solid #e7e2dc;
+  border-radius: 0;
+  background-color: transparent;
+  color: #292524;
+  cursor: pointer;
+}
+
+.task-item__status select:focus {
+  outline: none;
+  border-bottom-color: #e76f51;
 }
 
 /* ============================================================
@@ -271,7 +300,6 @@ button {
 /* ============================================================
    ====================== TASK STATUS =========================
    ============================================================ */
-
 .task-status {
   flex-shrink: 0;
   font-size: 0.72rem;
@@ -292,39 +320,19 @@ button {
   color: #166534;
 }
 
-.task-item__status {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.task-item__status label {
-  color: #78716c;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.task-item__status select {
-  min-width: 130px;
-  padding: 0.45rem 0;
-  border: none;
-  border-bottom: 1px solid #e7e2dc;
-  border-radius: 0;
-  background-color: transparent;
-  color: #292524;
-  cursor: pointer;
-}
-
-.task-item__status select:focus {
-  outline: none;
-  border-bottom-color: #e76f51;
-}
-
 /* ============================================================
    ======================= TASK FOOTER ========================
    ============================================================ */
+
+.task-item__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0ece7;
+}
 
 .task-item__actions {
   display: flex;
