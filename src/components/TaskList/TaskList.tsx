@@ -1,11 +1,16 @@
-import type { Task, TaskStatus } from "../../types/task";
+import type { Task, TaskPriority, TaskStatus } from "../../types/task";
 import TaskItem from "../TaskItem/TaskItem";
 
 interface TaskListProps {
   tasks: Task[];
   onDelete: (taskId: string) => void;
   onStatusChange: (taskId: string, status: TaskStatus) => void;
-  onUpdate: (taskId: string, title: string, description: string) => void;
+  onUpdate: (
+    taskId: string,
+    title: string,
+    description: string,
+    priority: TaskPriority,
+  ) => void;
 }
 
 function TaskList({

@@ -1,11 +1,16 @@
 import { useState, type ChangeEvent } from "react";
-import type { Task, TaskStatus } from "../../types/task";
+import type { Task, TaskPriority, TaskStatus } from "../../types/task";
 
 interface TaskItemProps {
   task: Task;
   onDelete: (taskId: string) => void;
   onStatusChange: (taskId: string, status: TaskStatus) => void;
-  onUpdate: (taskId: string, title: string, description: string) => void;
+  onUpdate: (
+    taskId: string,
+    title: string,
+    description: string,
+    priority: TaskPriority,
+  ) => void;
 }
 
 const taskStatuses: TaskStatus[] = ["todo", "in-progress", "done"];
@@ -18,6 +23,7 @@ function TaskItem({ task, onDelete, onStatusChange, onUpdate }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [editedDescription, setEditedDescription] = useState(task.description);
+  const [editedPriority, setEditedPriority] = useState(task.priority);
 
   const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newStatus = event.target.value;
@@ -35,13 +41,14 @@ function TaskItem({ task, onDelete, onStatusChange, onUpdate }: TaskItemProps) {
       return;
     }
 
-    onUpdate(task.id, title, description);
+    onUpdate(task.id, title, description, editedPriority);
     setIsEditing(false);
   };
 
   const handleCancel = () => {
     setEditedTitle(task.title);
     setEditedDescription(task.description);
+    setEditedPriority(task.priority);
     setIsEditing(false);
   };
 
@@ -68,6 +75,21 @@ function TaskItem({ task, onDelete, onStatusChange, onUpdate }: TaskItemProps) {
             onChange={(event) => setEditedDescription(event.target.value)}
           />
         </div>
+        <div className="task-item__field">
+          <label htmlFor={`priority-${task.id}`}>Priorité</label>
+
+          <select
+            id={`priority-${task.id}`}
+            value={editedPriority}
+            onChange={(event) =>
+              setEditedPriority(event.target.value as TaskPriority)
+            }
+          >
+            <option value="low">Faible</option>
+            <option value="medium">Moyenne</option>
+            <option value="high">Haute</option>
+          </select>
+        </div>
 
         <div className="task-item__actions">
           <button className="task-item__save" onClick={handleSave}>
@@ -88,11 +110,21 @@ function TaskItem({ task, onDelete, onStatusChange, onUpdate }: TaskItemProps) {
         <div className="task-item__header">
           <h2 className="task-item__title">{task.title}</h2>
 
-          <span className={`task-status task-status--${task.status}`}>
-            {task.status === "todo" && "À faire"}
-            {task.status === "in-progress" && "En cours"}
-            {task.status === "done" && "Terminée"}
-          </span>
+          <div className="task-item__meta">
+            <span className={`task-status task-status--${task.status}`}>
+              {task.status === "todo" && "À faire"}
+              {task.status === "in-progress" && "En cours"}
+              {task.status === "done" && "Terminée"}
+            </span>
+
+            <span className="task-item__separator">•</span>
+
+            <span className={`task-priority task-priority--${task.priority}`}>
+              {task.priority === "low" && "Faible"}
+              {task.priority === "medium" && "Moyenne"}
+              {task.priority === "high" && "Haute"}
+            </span>
+          </div>
         </div>
 
         {task.description && (

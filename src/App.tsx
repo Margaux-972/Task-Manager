@@ -4,7 +4,14 @@ import TaskForm from "./components/TaskForm/TaskForm";
 import TaskList from "./components/TaskList/TaskList";
 import TaskFilters from "./components/TaskFilter/TaskFilters";
 import { getTasks, saveTasks } from "./services/taskStorage";
-import type { Task, TaskFilter, TaskStatus } from "./types/task";
+import type {
+  Task,
+  TaskFilter,
+  TaskPriority,
+  TaskPriorityFilter,
+  TaskStatus,
+} from "./types/task";
+
 import {
   createTask,
   deleteTask,
@@ -15,13 +22,19 @@ import {
 function App() {
   const [tasks, setTasks] = useState<Task[]>(getTasks);
   const [filter, setFilter] = useState<TaskFilter>("all");
+  const [priorityFilter, setPriorityFilter] =
+    useState<TaskPriorityFilter>("all");
 
   useEffect(() => {
     saveTasks(tasks);
   }, [tasks]);
 
-  const handleAddTask = (title: string, description: string) => {
-    const newTask = createTask(title, description);
+  const handleAddTask = (
+    title: string,
+    description: string,
+    priority: TaskPriority,
+  ) => {
+    const newTask = createTask(title, description, priority);
 
     setTasks((currentTasks) => [...currentTasks, newTask]);
   };
@@ -38,9 +51,10 @@ function App() {
     taskId: string,
     title: string,
     description: string,
+    priority: TaskPriority,
   ) => {
     setTasks((currentTasks) =>
-      updateTask(currentTasks, taskId, title, description),
+      updateTask(currentTasks, taskId, title, description, priority),
     );
   };
 
@@ -51,8 +65,14 @@ function App() {
     done: tasks.filter((task) => task.status === "done").length,
   };
 
-  const filteredTasks =
-    filter === "all" ? tasks : tasks.filter((task) => task.status === filter);
+  const filteredTasks = tasks.filter((task) => {
+    const matchesStatus = filter === "all" || task.status === filter;
+
+    const matchesPriority =
+      priorityFilter === "all" || task.priority === priorityFilter;
+
+    return matchesStatus && matchesPriority;
+  });
 
   return (
     <main className="app">
@@ -72,8 +92,10 @@ function App() {
       </section>
       <TaskFilters
         filter={filter}
+        priorityFilter={priorityFilter}
         counts={taskCounts}
         onFilterChange={setFilter}
+        onPriorityFilterChange={setPriorityFilter}
       />
 
       <TaskList

@@ -1,35 +1,44 @@
 .app {
   width: min(100% - 2rem, 900px);
   margin: 0 auto;
-  padding: 3rem 0;
+  padding: 3.5rem 0 4rem;
 }
 
 .app__header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.75rem;
 }
 
 .app__eyebrow {
   margin: 0 0 0.5rem;
-  color: #e76f51;
+
+  color: var(--color-primary);
+
   font-size: 0.85rem;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .app__header h1 {
   margin: 0;
-  color: #292524;
+
+  color: var(--color-text);
+
   font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
 .app__subtitle {
   max-width: 600px;
-  margin: 0.75rem 0 0;
-  color: #78716c;
+
+  margin: 0.85rem 0 0;
+
+  color: var(--color-text-secondary);
+
   line-height: 1.6;
 }
 
 .app__form {
-  margin-bottom: 2rem;
+  margin-bottom: 2.75rem;
 }

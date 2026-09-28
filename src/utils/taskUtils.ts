@@ -1,11 +1,16 @@
-import type { Task, TaskStatus } from "../types/task";
+import type { Task, TaskPriority, TaskStatus } from "../types/task";
 
-export function createTask(title: string, description: string): Task {
+export function createTask(
+  title: string,
+  description: string,
+  priority: TaskPriority,
+): Task {
   return {
     id: crypto.randomUUID(),
     title,
     description,
     status: "todo",
+    priority,
     createdAt: new Date().toISOString(),
   };
 }
@@ -36,6 +41,7 @@ export function updateTask(
   taskId: string,
   title: string,
   description: string,
+  priority: TaskPriority,
 ): Task[] {
   return tasks.map((task) => {
     if (task.id === taskId) {
@@ -43,6 +49,7 @@ export function updateTask(
         ...task,
         title,
         description,
+        priority,
       };
     }
 
